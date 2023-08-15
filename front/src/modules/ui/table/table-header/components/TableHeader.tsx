@@ -23,6 +23,7 @@ type OwnProps<SortField> = {
   availableSorts?: Array<SortType<SortField>>;
   onColumnsChange?: (columns: ViewFieldDefinition<ViewFieldMetadata>[]) => void;
   onSortsUpdate?: (sorts: Array<SelectedSortType<SortField>>) => void;
+  onImport?: () => void;
 };
 
 const StyledIcon = styled.div`
@@ -41,6 +42,7 @@ export function TableHeader<SortField>({
   availableSorts,
   onColumnsChange,
   onSortsUpdate,
+  onImport,
 }: OwnProps<SortField>) {
   const [sorts, setSorts] = useRecoilScopedState<SelectedSortType<SortField>[]>(
     sortScopedState,
@@ -86,6 +88,7 @@ export function TableHeader<SortField>({
             HotkeyScope={FiltersHotkeyScope.FilterDropdownButton}
           />
           <TableOptionsDropdownButton
+            onImport={onImport}
             onColumnsChange={onColumnsChange}
             HotkeyScope={FiltersHotkeyScope.FilterDropdownButton}
           />

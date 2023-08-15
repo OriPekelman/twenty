@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { peopleViewFields } from '@/people/constants/peopleViewFields';
+import { useSpreadsheetPeopleImport } from '@/people/hooks/useSpreadsheetPeopleImport';
 import { filtersScopedState } from '@/ui/filter-n-sort/states/filtersScopedState';
 import { sortsOrderByScopedState } from '@/ui/filter-n-sort/states/sortScopedState';
 import { turnFilterIntoWhereClause } from '@/ui/filter-n-sort/utils/turnFilterIntoWhereClause';
@@ -29,6 +30,7 @@ export function PeopleTable() {
   const orderBy = useRecoilScopedValue(sortsOrderByScopedState, TableContext);
   const [updateEntityMutation] = useUpdateOnePersonMutation();
   const upsertEntityTableItem = useUpsertEntityTableItem();
+  const { openEntitySpreadsheetImport } = useSpreadsheetPeopleImport();
 
   const { handleColumnsChange } = useTableViewFields({
     objectName: 'person',
@@ -45,6 +47,10 @@ export function PeopleTable() {
     return { AND: filters.map(turnFilterIntoWhereClause) };
   }, [filters]) as any;
 
+  function handleImport() {
+    openEntitySpreadsheetImport();
+  }
+
   return (
     <>
       <GenericEntityTableData
@@ -60,6 +66,7 @@ export function PeopleTable() {
         availableSorts={availableSorts}
         onColumnsChange={handleColumnsChange}
         onSortsUpdate={currentViewId ? updateSorts : undefined}
+        onImport={handleImport}
         updateEntityMutation={({
           variables,
         }: {

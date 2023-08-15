@@ -44,6 +44,14 @@ export const INSERT_ONE_PERSON = gql`
   }
 `;
 
+export const INSERT_MANY_PERSON = gql`
+  mutation InsertManyPerson($data: [PersonCreateManyInput!]!) {
+    createManyPerson(data: $data) {
+      count
+    }
+  }
+`;
+
 export const DELETE_MANY_PERSON = gql`
   mutation DeleteManyPerson($ids: [String!]) {
     deleteManyPerson(where: { id: { in: $ids } }) {

@@ -59,3 +59,4 @@ export { IconCross } from '@tabler/icons-react';
 export { IconArrowBack } from '@tabler/icons-react';
 export { IconForbid } from '@tabler/icons-react';
 export { IconFileImport } from '@tabler/icons-react';
+export { IconBrandTwitter } from '@tabler/icons-react';

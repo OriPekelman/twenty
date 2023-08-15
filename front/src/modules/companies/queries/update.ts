@@ -37,6 +37,14 @@ export const INSERT_ONE_COMPANY = gql`
   }
 `;
 
+export const INSERT_MANY_COMPANY = gql`
+  mutation InsertManyCompany($data: [CompanyCreateManyInput!]!) {
+    createManyCompany(data: $data) {
+      count
+    }
+  }
+`;
+
 export const DELETE_MANY_COMPANIES = gql`
   mutation DeleteManyCompanies($ids: [String!]) {
     deleteManyCompany(where: { id: { in: $ids } }) {

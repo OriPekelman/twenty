@@ -647,6 +647,18 @@ export type CompanyCreateInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
+export type CompanyCreateManyInput = {
+  accountOwnerId?: InputMaybe<Scalars['String']>;
+  address: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  domainName: Scalars['String'];
+  employees?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['String']>;
+  linkedinUrl?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
 export type CompanyCreateNestedOneWithoutActivityTargetInput = {
   connect?: InputMaybe<CompanyWhereUniqueInput>;
 };
@@ -953,6 +965,8 @@ export type Mutation = {
   createEvent: Analytics;
   createFavoriteForCompany: Favorite;
   createFavoriteForPerson: Favorite;
+  createManyCompany: AffectedRows;
+  createManyPerson: AffectedRows;
   createManyViewField: AffectedRows;
   createManyViewSort: AffectedRows;
   createOneActivity: Activity;
@@ -1016,6 +1030,18 @@ export type MutationCreateFavoriteForCompanyArgs = {
 
 export type MutationCreateFavoriteForPersonArgs = {
   data: FavoriteMutationForPersonArgs;
+};
+
+
+export type MutationCreateManyCompanyArgs = {
+  data: Array<CompanyCreateManyInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationCreateManyPersonArgs = {
+  data: Array<PersonCreateManyInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1357,6 +1383,22 @@ export type PersonCreateInput = {
   city?: InputMaybe<Scalars['String']>;
   company?: InputMaybe<CompanyCreateNestedOneWithoutPeopleInput>;
   contactPipelineProgresses?: InputMaybe<PipelineProgressCreateNestedManyWithoutPointOfContactInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  email?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  jobTitle?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  linkedinUrl?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  xUrl?: InputMaybe<Scalars['String']>;
+};
+
+export type PersonCreateManyInput = {
+  avatarUrl?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  companyId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   email?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
@@ -2811,6 +2853,13 @@ export type InsertOneCompanyMutationVariables = Exact<{
 
 export type InsertOneCompanyMutation = { __typename?: 'Mutation', createOneCompany: { __typename?: 'Company', address: string, createdAt: string, domainName: string, employees?: number | null, linkedinUrl?: string | null, id: string, name: string, accountOwner?: { __typename?: 'User', id: string, email: string, displayName: string, avatarUrl?: string | null } | null } };
 
+export type InsertManyCompanyMutationVariables = Exact<{
+  data: Array<CompanyCreateManyInput> | CompanyCreateManyInput;
+}>;
+
+
+export type InsertManyCompanyMutation = { __typename?: 'Mutation', createManyCompany: { __typename?: 'AffectedRows', count: number } };
+
 export type DeleteManyCompaniesMutationVariables = Exact<{
   ids?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
@@ -2925,6 +2974,13 @@ export type InsertOnePersonMutationVariables = Exact<{
 
 
 export type InsertOnePersonMutation = { __typename?: 'Mutation', createOnePerson: { __typename?: 'Person', id: string, firstName?: string | null, lastName?: string | null, displayName: string, createdAt: string } };
+
+export type InsertManyPersonMutationVariables = Exact<{
+  data: Array<PersonCreateManyInput> | PersonCreateManyInput;
+}>;
+
+
+export type InsertManyPersonMutation = { __typename?: 'Mutation', createManyPerson: { __typename?: 'AffectedRows', count: number } };
 
 export type DeleteManyPersonMutationVariables = Exact<{
   ids?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -4228,6 +4284,39 @@ export function useInsertOneCompanyMutation(baseOptions?: Apollo.MutationHookOpt
 export type InsertOneCompanyMutationHookResult = ReturnType<typeof useInsertOneCompanyMutation>;
 export type InsertOneCompanyMutationResult = Apollo.MutationResult<InsertOneCompanyMutation>;
 export type InsertOneCompanyMutationOptions = Apollo.BaseMutationOptions<InsertOneCompanyMutation, InsertOneCompanyMutationVariables>;
+export const InsertManyCompanyDocument = gql`
+    mutation InsertManyCompany($data: [CompanyCreateManyInput!]!) {
+  createManyCompany(data: $data) {
+    count
+  }
+}
+    `;
+export type InsertManyCompanyMutationFn = Apollo.MutationFunction<InsertManyCompanyMutation, InsertManyCompanyMutationVariables>;
+
+/**
+ * __useInsertManyCompanyMutation__
+ *
+ * To run a mutation, you first call `useInsertManyCompanyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertManyCompanyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertManyCompanyMutation, { data, loading, error }] = useInsertManyCompanyMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useInsertManyCompanyMutation(baseOptions?: Apollo.MutationHookOptions<InsertManyCompanyMutation, InsertManyCompanyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertManyCompanyMutation, InsertManyCompanyMutationVariables>(InsertManyCompanyDocument, options);
+      }
+export type InsertManyCompanyMutationHookResult = ReturnType<typeof useInsertManyCompanyMutation>;
+export type InsertManyCompanyMutationResult = Apollo.MutationResult<InsertManyCompanyMutation>;
+export type InsertManyCompanyMutationOptions = Apollo.BaseMutationOptions<InsertManyCompanyMutation, InsertManyCompanyMutationVariables>;
 export const DeleteManyCompaniesDocument = gql`
     mutation DeleteManyCompanies($ids: [String!]) {
   deleteManyCompany(where: {id: {in: $ids}}) {
@@ -4877,6 +4966,39 @@ export function useInsertOnePersonMutation(baseOptions?: Apollo.MutationHookOpti
 export type InsertOnePersonMutationHookResult = ReturnType<typeof useInsertOnePersonMutation>;
 export type InsertOnePersonMutationResult = Apollo.MutationResult<InsertOnePersonMutation>;
 export type InsertOnePersonMutationOptions = Apollo.BaseMutationOptions<InsertOnePersonMutation, InsertOnePersonMutationVariables>;
+export const InsertManyPersonDocument = gql`
+    mutation InsertManyPerson($data: [PersonCreateManyInput!]!) {
+  createManyPerson(data: $data) {
+    count
+  }
+}
+    `;
+export type InsertManyPersonMutationFn = Apollo.MutationFunction<InsertManyPersonMutation, InsertManyPersonMutationVariables>;
+
+/**
+ * __useInsertManyPersonMutation__
+ *
+ * To run a mutation, you first call `useInsertManyPersonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertManyPersonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertManyPersonMutation, { data, loading, error }] = useInsertManyPersonMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useInsertManyPersonMutation(baseOptions?: Apollo.MutationHookOptions<InsertManyPersonMutation, InsertManyPersonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertManyPersonMutation, InsertManyPersonMutationVariables>(InsertManyPersonDocument, options);
+      }
+export type InsertManyPersonMutationHookResult = ReturnType<typeof useInsertManyPersonMutation>;
+export type InsertManyPersonMutationResult = Apollo.MutationResult<InsertManyPersonMutation>;
+export type InsertManyPersonMutationOptions = Apollo.BaseMutationOptions<InsertManyPersonMutation, InsertManyPersonMutationVariables>;
 export const DeleteManyPersonDocument = gql`
     mutation DeleteManyPerson($ids: [String!]) {
   deleteManyPerson(where: {id: {in: $ids}}) {
