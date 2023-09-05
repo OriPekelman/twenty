@@ -1,0 +1,72 @@
+# A unique name for the app. Must be lowercase alphanumeric characters. Changing the name destroys data associated
+# with the app.
+front: # Complete list of all available properties: https://docs.platform.sh/create-apps/app-reference.html
+  # The runtime the application uses.
+  # Complete list of available runtimes: https://docs.platform.sh/create-apps/app-reference.html#types
+  type: nodejs:18
+  build:
+    flavor: none
+  dependencies:
+      nodejs:
+        yarn: "1.22.19"
+  hooks:
+    build: |
+      cd front
+      yarn install
+      yarn build
+  # The size of the persistent disk of the application (in MB). Minimum value is 128.
+  disk: 512
+
+  # The web key configures the web server running in front of your app.
+  # More information: https://docs.platform.sh/create-apps/app-reference.html#web
+  web:
+    locations:
+        '/':
+            # The public directory of the application relative to its root.
+            root: 'front/build'
+            index: ['index.html']
+            scripts: false
+            allow: true
+# A unique name for the app. Must be lowercase alphanumeric characters. Changing the name destroys data associated
+# with the app.
+server: # Complete list of all available properties: https://docs.platform.sh/create-apps/app-reference.html
+  # The runtime the application uses.
+  # Complete list of available runtimes: https://docs.platform.sh/create-apps/app-reference.html#types
+  type: nodejs:18
+  build:
+    flavor: none
+  dependencies:
+    nodejs:
+        yarn: "1.22.19"
+  hooks:
+    build: |
+      cd server
+      yarn
+      yarn build
+    deploy: |
+      yarn prisma:migrate
+      yarn prisma:reset
+  # The relationships of the application with services or other applications.
+  # The left-hand side is the name of the relationship as it will be exposed
+  # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
+  # side is in the form `<service name>:<endpoint name>`.
+  # More information: https://docs.platform.sh/create-apps/app-reference.html#relationships
+  relationships:
+    database: "dbpostgres:postgresql"
+  # The size of the persistent disk of the application (in MB). Minimum value is 128.
+  disk: 512
+  mounts:
+    '.local-storage':
+        source: local
+        source_path: local-storage
+  # The web key configures the web server running in front of your app.
+  # More information: https://docs.platform.sh/create-apps/app-reference.html#web
+  web:
+    locations:
+      '/':
+        passthru: true
+    # Commands are run once after deployment to start the application process.
+    # More information: https://docs.platform.sh/create-apps/app-reference.html#web-commands
+    commands:
+      # The command to launch your app. If it terminates, it’s restarted immediately.
+      start: "bun dist/src/main"

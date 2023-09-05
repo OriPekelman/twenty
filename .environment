@@ -1,0 +1,30 @@
+export REACT_APP_SERVER_BASE_URL=$(echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.primary == true) | .key')
+
+# ———————— Optional ————————
+# REACT_APP_SERVER_AUTH_URL=http://localhost:3000/auth
+# REACT_APP_SERVER_FILES_URL=http://localhost:3000/files
+# CHROMATIC_PROJECT_TOKEN=
+
+
+export PG_DATABASE_URL="postgresql://main:main@postgresdatabase.internal:5432/main"
+
+export FRONT_BASE_URL=$(echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.primary == true) | .key')
+# FIXME: the following should probably not be the same
+export ACCESS_TOKEN_SECRET=$(echo $PLATFORM_PROJECT_ENTROPY| cut -c-24)
+export LOGIN_TOKEN_SECRET=$(echo $PLATFORM_PROJECT_ENTROPY| cut -c-24)
+export REFRESH_TOKEN_SECRET=$(echo $PLATFORM_PROJECT_ENTROPY| cut -c-24)
+export SIGN_IN_PREFILLED=true
+
+# ———————— Optional ————————
+# DEBUG_MODE=true
+# ACCESS_TOKEN_EXPIRES_IN=30m
+# LOGIN_TOKEN_EXPIRES_IN=15m
+# REFRESH_TOKEN_EXPIRES_IN=90d 
+# FRONT_AUTH_CALLBACK_URL=http://localhost:3001/verify 
+# AUTH_GOOGLE_ENABLED=false
+# STORAGE_TYPE=local
+# STORAGE_LOCAL_PATH=.local-storage
+# SUPPORT_DRIVER=front
+# SUPPORT_FRONT_HMAC_KEY=replace_me_with_front_chat_verification_secret
+# SUPPORT_FRONT_CHAT_ID=replace_me_with_front_chat_id
+
