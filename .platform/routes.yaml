@@ -6,7 +6,7 @@
 "https://{default}/":
     type: upstream
     upstream: "front:http"
-"https://server.{default}/":
+"https://{default}/api":
     type: upstream
     upstream: "server:http"
     primary: true

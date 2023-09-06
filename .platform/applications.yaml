@@ -9,6 +9,12 @@ front: # Complete list of all available properties: https://docs.platform.sh/cre
   dependencies:
       nodejs:
         yarn: "1.22.19"
+  variables:
+    env:
+     REACT_APP_SERVER_BASE_URL: "/api"
+     REACT_APP_SERVER_AUTH_URL: "/api/auth"
+     REACT_APP_SERVER_FILES_URL: "/api/files"
+
   hooks:
     build: |
       cd front
@@ -43,7 +49,11 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
       cd server
       yarn
       yarn build
+      mkdir ../tmp_to_deploy
+      mv server/node_modules/.prisma/* ../tmp_to_deploy/.prisma
+      ln -s /app/.prisma/ server/node_modules/.prisma/
     deploy: |
+      cp -rp tmp_to_deploy/.prisma/* .prisma/
       yarn prisma:migrate
       yarn prisma:reset
   # The relationships of the application with services or other applications.
@@ -62,6 +72,9 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
     '.local-storage':
         source: local
         source_path: local-storage
+    '.prisma':
+        source: local
+        source_path: prisma 
   # The web key configures the web server running in front of your app.
   # More information: https://docs.platform.sh/create-apps/app-reference.html#web
   web:
