@@ -9,11 +9,6 @@ export FRONT_BASE_URL=$(echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entr
 # The secrets are per environment and are used to sign the tokens
 # But constant through the project life-cycle (same environment name will have the same secrets)
 hash_with_entropy() {
-    if [[ -z "$PLATFORM_PROJECT_ENTROPY" ]]; then
-        echo "Error: \$PLATFORM_PROJECT_ENTROPY is not set"
-        return 1
-    fi
-
     local input_string="$1${PLATFORM_PROJECT_ENTROPY}${PLATFORM_BRANCH}"
     echo -n "$input_string" | sha1sum | sed 's/ .*$//'
 }

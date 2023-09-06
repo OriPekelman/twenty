@@ -49,11 +49,8 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
       cd server
       yarn
       yarn build
-      mkdir ../tmp_to_deploy
-      mv server/node_modules/.prisma/* ../tmp_to_deploy/.prisma
-      ln -s /app/.prisma/ server/node_modules/.prisma/
     deploy: |
-      cp -rp tmp_to_deploy/.prisma/* .prisma/
+      cd server
       yarn prisma:migrate
       yarn prisma:reset
   # The relationships of the application with services or other applications.
@@ -72,7 +69,7 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
     '.local-storage':
         source: local
         source_path: local-storage
-    '.prisma':
+    'server/node_modules/.prisma/':
         source: local
         source_path: prisma 
   # The web key configures the web server running in front of your app.
@@ -81,6 +78,10 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
     locations:
       '/':
         passthru: true
+        rules:
+          "^/api/(.*)$":
+            passthru: "/$1"
+        
     # Commands are run once after deployment to start the application process.
     # More information: https://docs.platform.sh/create-apps/app-reference.html#web-commands
     commands:
