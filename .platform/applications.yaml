@@ -69,6 +69,7 @@ server: # Complete list of all available properties: https://docs.platform.sh/cr
     '.local-storage':
         source: local
         source_path: local-storage
+    # the following is probably not needed.
     'server/node_modules/.prisma/':
         source: local
         source_path: prisma 
